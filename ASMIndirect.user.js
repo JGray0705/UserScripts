@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         ASMIndirect
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/jgray0705/userscripts
 // @version      1.0
 // @description  Sign in to ASM
 // @author       grajef@
-// @match        https://aftlite-na.amazon.com/indirect_action/signin_indirect_action
+// @match        https://aftlite-na.amazon.com/indirect_action/signin_indirect_action*
 // @grant        none
 // ==/UserScript==
 
@@ -17,8 +17,8 @@
         document.getElementsByName("code")[0].value = "ASM";
     };
     var buttonEOS = document.createElement("button");
-    button.innerHTML = "EOS";
-    button.onclick = function() {
+    buttonEOS.innerHTML = "EOS";
+    buttonEOS.onclick = function() {
         var login = document.getElementsByTagName("span")[0].innerHTML.match(/\(([^)]+)\)/)[1];
         document.getElementsByName("name")[0].value = login;
         document.getElementsByName("code")[0].value = "EOS";
