@@ -7,19 +7,46 @@
 // @match        https://aftlite-na.amazon.com/inventory/view_inventory_for_asin*
 // @match        https://aftlite-na.amazon.com/inventory/view_inventory_at*
 // @match        https://aftlite-na.amazon.com/inventory/view_catalog_data_for_asin*
+// @match        https://aftlite-portal.amazon.com/inventory/view_inventory_for_asin_display*
 // @grant        none
 // ==/UserScript==
 
 (function() {
-    var body = document.body;
     // just copy of the HTML from the inventory page
-    //body.innerHTML += '<table><tr><td class="BigLabel">Inventory</td><td colspan="4"><div><input name="utf8" type="hidden" value="✓"><input name="authenticity_token" type="hidden" value="Tr5o+H6fuuahQjuzSMSjnHfE4CoWhwX6r0UexvBRjwo="></div><table><tbody><tr><td colspan="2"><form accept-charset="UTF-8" action="/inventory/view_inventory_for_asin" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"><input name="authenticity_token" type="hidden" value="Tr5o+H6fuuahQjuzSMSjnHfE4CoWhwX6r0UexvBRjwo="></div>Inventory by ASIN or UPC <input type="text" name="asin" size="20"><input type="submit" name="view" value="view or update"></form></td></tr><tr><td colspan="2" width="400"><form accept-charset="UTF-8" action="/inventory/view_inventory_at" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"><input name="authenticity_token" type="hidden" value="Tr5o+H6fuuahQjuzSMSjnHfE4CoWhwX6r0UexvBRjwo="></div>Inventory by Location <input type="text" name="location_name" size="20"><input type="submit" name="view" value="view or move"></form></td></tr><tr><td colspan="2" width="400"><form accept-charset="UTF-8" action="/inventory/view_catalog_data_for_asin" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"><input name="authenticity_token" type="hidden" value="Tr5o+H6fuuahQjuzSMSjnHfE4CoWhwX6r0UexvBRjwo="></div>Catalog or weight data by ASIN <input type="text" name="asin" size="20"><input type="submit" name="view" value="View"></form></td></tr><tr></table>';
-    if(window.location.href.indexOf("view_inventory_for_asin")) { // add image to asin page
+    var tables = document.getElementsByTagName("table");
+    var table = tables[tables.length - 1];
+    var row1 = document.createElement("tr");
+    var row2 = document.createElement("tr");
+    var row3 = document.createElement("tr");
+    row1.innerHTML = '<td><form accept-charset="UTF-8" action="/inventory/view_inventory_for_asin" method="post">Inventory by ASIN or UPC <input type="text" name="asin" size="20"><input type="submit" name="view" value="view or update"/></form></td>'
+    row2.innerHTML = '<td><form accept-charset="UTF-8" action="/inventory/view_inventory_at" method="post">Inventory by Location <input type="text" name="location_name" size="20"/><input type="submit" name="view" value="view or move"/></form></td>'
+    row3.innerHTML = '<td><form accept-charset="UTF-8" action="/inventory/view_catalog_data_for_asin" method="post">Catalog or weight data by ASIN <input type="text" name="asin" size="20"/><input type="submit" name="view" value="View"/></form></td>';
+    tables[1].appendChild(row1);
+    tables[1].appendChild(row2);
+    tables[1].appendChild(row3);
+    if(window.location.href.indexOf("aftlite-portal" <= -1)) { // check for portal page to add some classes for css
+        var buttons = document.querySelectorAll('input[type="submit"]');
+        buttons.forEach(x => {
+            x.classList.add("a-button-primary");
+            x.classList.add("a-button");
+            x.style.borderRadius = '2px';
+            x.style.padding = '1px';
+        }); // make all of the buttons match
+        if(window.location.href.indexOf("view_inventory_for_asin_display") <= -1) { // asin page for AFTLite-Portal
+            var portalAsinHeader = document.getElementsByTagName("h3")[0].innerHTML.split(" ");
+            addImage(portalAsinHeader);
+        }
+    }
+    else if(window.location.href.indexOf("view_inventory_for_asin") <= -1) { // add image to asin page for AFTLite-na
         var asinHeader = document.getElementsByTagName("h2")[0].innerHTML.split(" ");
-        var asin = asinHeader[asinHeader.length - 1];
-        var img = document.createElement("img");
-        img.src = "https://m.media-amazon.com/images/P/" + asin + ".jpg";
-        img.width = 250
-        body.appendChild(img);
+        addImage(asinHeader);
     }
 })();
+
+function addImage(title) {
+    var asin = title[title.length - 1];
+    var img = document.createElement("img");
+    img.src = "https://m.media-amazon.com/images/P/" + asin + ".jpg";
+    img.width = 250
+    document.body.appendChild(img);
+}
