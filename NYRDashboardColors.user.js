@@ -4,7 +4,7 @@
 // @version      1.0
 // @description  Add SLA colors and auto refresh to the NYR dashboard
 // @author       grajef@
-// @match        https://aftlite-na.amazon.com/inbound/nyr_dashboard
+// @match        https://aftlite-na.amazon.com/inbound/nyr_dashboard*
 // @grant        none
 // ==/UserScript==
 
