@@ -16,10 +16,10 @@
     for(let row of table.rows) {
         if(row.rowIndex < 1) { continue; }
         var timeToSLA = Number(row.cells[7].innerHTML.split(":")[0]);
-        if(timeToSLA < 5) {
+        if(timeToSLA < 0) {
             row.cells[7].style.background = 'red';
         }
-        else if(timeToSLA < 9) {
+        else if(timeToSLA < 2) {
             row.cells[7].style.background = 'orange';
         }
         else {
