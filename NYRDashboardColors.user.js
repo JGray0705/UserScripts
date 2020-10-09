@@ -16,14 +16,14 @@
     for(let row of table.rows) {
         if(row.rowIndex < 1) { continue; }
         var timeToSLA = Number(row.cells[7].innerHTML.split(":")[0]);
-        if(timeToSLA < 0) {
+        if(timeToSLA < 5) {
             row.cells[7].style.background = 'red';
         }
-        else if(timeToSLA < 2) {
-            row.cells[7].style.background = 'yellow';
+        else if(timeToSLA < 9) {
+            row.cells[7].style.background = 'orange';
         }
         else {
-            row.cells[7].style.background = 'green';
+            row.cells[7].style.background = '#56d12a';
         }
     };
 })();
