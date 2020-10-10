@@ -5,6 +5,7 @@
 // @description  Check all the boxes
 // @author       grajef
 // @match        https://aftlite-portal.amazon.com/admin/users
+// @downloadURL  https://github.com/JGray0705/UserScripts/raw/master/BaselineSelectAll.user.js
 // @grant        none
 // ==/UserScript==
 
