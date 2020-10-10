@@ -5,6 +5,7 @@
 // @description  Sign in to ASM
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/indirect_action/signin_indirect_action*
+// @downloadURL  https://github.com/JGray0705/UserScripts/raw/master/ASMIndirect.user.js
 // @grant        none
 // ==/UserScript==
 
