@@ -7,6 +7,7 @@
 // @match        https://aftlite-na.amazon.com/labor_tracking/labor_summary*
 // @match        https://aftlite-na.amazon.com/labor_tracking/view_daily_detail*
 // @match        https://aftlite-na.amazon.com/labor_tracking/uph_drilldown*
+// @downloadURL  https://github.com/JGray0705/UserScripts/raw/master/DateInputHelper.user.js
 // @grant        none
 // ==/UserScript==
 
