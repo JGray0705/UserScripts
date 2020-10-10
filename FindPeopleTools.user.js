@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         FindPeopleTools
 // @namespace    https://github.com/jgray0705/userscripts
-// @version      1.2
+// @version      1.1
 // @description  Add auto refresh and highlight idle logins
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/labor_tracking/find_people*
@@ -33,10 +33,9 @@
         check.style.marginLeft = "10px";
         check.style.marginRight = "4px";
         cbLabel.innerHTML = "Auto Refresh";
-        let main = document.getElementsByTagName("table")[0];
-        main.after(check);
+        let main = document.getElementById("main-content");
+        main.before(check);
         check.after(cbLabel);
-        cbLabel.after(getIndirectForm());
     }
 })();
 
