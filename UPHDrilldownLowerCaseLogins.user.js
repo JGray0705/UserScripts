@@ -5,6 +5,7 @@
 // @description  Let's retail assistant work on the UPH drilldown page (requires lower case logins to work)
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/labor_tracking/uph_drilldown
+// @downloadURL  https://github.com/JGray0705/UserScripts/raw/master/UPHDrilldownLowerCaseLogins.user.js
 // @grant        none
 // ==/UserScript==
 
