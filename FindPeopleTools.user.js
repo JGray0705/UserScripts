@@ -6,6 +6,7 @@
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/labor_tracking/find_people*
 // @match        https://aftlite-portal.amazon.com/labor_tracking/find_people*
+// @downloadURL  https://github.com/JGray0705/UserScripts/raw/master/DateInputHelper.user.js
 // @grant        none
 // ==/UserScript==
 
