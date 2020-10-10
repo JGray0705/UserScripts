@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         FindPeopleTools
 // @namespace    https://github.com/jgray0705/userscripts
-// @version      1.1
+// @version      1.2
 // @description  Add auto refresh and highlight idle logins
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/labor_tracking/find_people*
