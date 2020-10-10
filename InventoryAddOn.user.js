@@ -10,6 +10,7 @@
 // @match        https://aftlite-portal.amazon.com/inventory/view_inventory_for_asin_display*
 // @match        https://aftlite-portal.amazon.com/inventory/view_inventory_at*
 // @match        https://aftlite-portal.amazon.com/inventory/view_catalog_data_for_asin*
+// @downloadURL  https://github.com/JGray0705/UserScripts/raw/master/InventoryAddOn.user.js
 // @grant        none
 // ==/UserScript==
 
