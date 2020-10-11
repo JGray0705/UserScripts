@@ -27,11 +27,15 @@
     green.after(blue);
     blue.after(red);
 
+    let goal = document.createElement("p");
+    red.after(goal);
     setInterval(function() {
         let progress = document.getElementsByTagName("b")[1].innerHTML.split("(")[1].split(")")[0].split("%")[0];
         progress = Number(progress);
-        if(progress === 100) {
+        var bars = document.querySelectorAll(".progress-bar");
+        if(progress >= 100) {
             // all done! set to green
+            goal.innerHTML = "Target: 100%";
             for(let bar of bars) {
                 bar.classList.remove("bg-success");
                 bar.style.backgroundColor = "green";
@@ -42,8 +46,8 @@
             let min = t.getMinutes() - 4; // since batching starts ~ 4 minutes after the hour,
             min = min < 0 ? 0 : min * 100; // min is a decimal but progress is a whole number (x% vs. .x)
 
-            let timePercent = min / 30;
-            var bars = document.querySelectorAll(".progress-bar");
+            let timePercent = min / 29; // this will target completion at 33 minutes after the hour (29 + the 4 subtracted earlier)
+            goal.innerHTML = "Target: " + (timePercent > 100 ? 100 : Math.round(timePercent)) + "%";
             if(timePercent > progress) {
                 // we are behind. set to red
                 for(let bar of bars) {
@@ -52,17 +56,17 @@
                 }
             }
             else if(timePercent < (progress + 5)) {
-                // ahead, too many batchers. set to yellow
-                for(let bar of bars) {
-                    bar.classList.remove("bg-success");
-                    bar.style.backgroundColor = "#5d9def";
-                }
-            }
-            else {
                 // on time. set to green
                 for(let bar of bars) {
                     bar.classList.remove("bg-success");
                     bar.style.backgroundColor = "green";
+                }
+            }
+            else {
+                // ahead, too many batchers. set to yellow
+                for(let bar of bars) {
+                    bar.classList.remove("bg-success");
+                    bar.style.backgroundColor = "#5d9def";
                 }
             }
         }
