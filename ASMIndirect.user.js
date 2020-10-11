@@ -10,19 +10,22 @@
 // ==/UserScript==
 
 (function() {
+    let button1 = "ASM";
+    let button2 = "EOS";
+    
     var button = document.createElement("button");
-    button.innerHTML = "ASM";
+    button.innerHTML = button1;
     button.onclick = function() {
         var login = document.getElementsByTagName("span")[0].innerHTML.match(/\(([^)]+)\)/)[1];
         document.getElementsByName("name")[0].value = login;
-        document.getElementsByName("code")[0].value = "ASM";
+        document.getElementsByName("code")[0].value = button1;
     };
     var buttonEOS = document.createElement("button");
-    buttonEOS.innerHTML = "EOS";
+    buttonEOS.innerHTML = button2;
     buttonEOS.onclick = function() {
         var login = document.getElementsByTagName("span")[0].innerHTML.match(/\(([^)]+)\)/)[1];
         document.getElementsByName("name")[0].value = login;
-        document.getElementsByName("code")[0].value = "EOS";
+        document.getElementsByName("code")[0].value = button2;
     };
     document.getElementsByTagName("form")[0].appendChild(button);
     document.getElementsByTagName("form")[0].appendChild(buttonEOS);
