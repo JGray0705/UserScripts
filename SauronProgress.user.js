@@ -5,7 +5,7 @@
 // @description  Change progress bar color based on if you are on time, behind, or too far ahead
 // @author       grajef@
 // @match        http://sauron-na.aka.amazon.com/*
-// @downloadURL  https://github.com/JGray0705/UserScripts/raw/SauronProgress.user.js
+// @downloadURL  https://github.com/JGray0705/UserScripts/raw/master/SauronProgress.user.js
 // @grant        none
 // ==/UserScript==
 
