@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SauronProgress
 // @namespace    https://github.com/JGray0705/UserScripts
-// @version      1.0
+// @version      1.1
 // @description  Change progress bar color based on if you are on time, behind, or too far ahead
 // @author       grajef@
 // @match        http://sauron-na.aka.amazon.com/*
@@ -37,8 +37,7 @@
             // all done! set to green
             goal.innerHTML = "Target: 100%";
             for(let bar of bars) {
-                bar.classList.remove("bg-success");
-                bar.style.backgroundColor = "green";
+                bar.classList.add("bg-success");
             }
         }
         else {
@@ -55,18 +54,18 @@
                     bar.style.backgroundColor = "red";
                 }
             }
-            else if(timePercent < (progress + 5)) {
-                // on time. set to green
-                for(let bar of bars) {
-                    bar.classList.remove("bg-success");
-                    bar.style.backgroundColor = "green";
-                }
-            }
-            else {
-                // ahead, too many batchers. set to yellow
+            else if(timePercent < (progress - 5)) {
+                // ahead, too many batchers. set to blue
                 for(let bar of bars) {
                     bar.classList.remove("bg-success");
                     bar.style.backgroundColor = "#5d9def";
+                }
+            }
+            else {
+                for(let bar of bars) {
+                    // on time. set to green
+                    bar.classList.remove("bg-success");
+                    bar.style.backgroundColor = "green";
                 }
             }
         }
