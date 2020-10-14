@@ -9,6 +9,10 @@ Script titles can be clicked to get the install URL
 
 ### Selects all checkboxes on the baseline users page saving many clicks.
 
+# [Copy Labor Summary](https://github.com/JGray0705/UserScripts/raw/master/CopyLaborSummary.user.js)
+
+### Highlight and copy the labor summary table
+
 # [Daily Detail Help](https://github.com/JGray0705/UserScripts/raw/master/DailyDetailHelp.user.js)
 
 ### Adds a lookup history link to the usernames on the daily detail page.
