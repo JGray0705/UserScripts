@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         DateInputHelper
-// @namespace    http://tampermonkey.net/
-// @version      1.0
+// @namespace    https://github.com/jgray0705/userscripts
+// @version      1.1
 // @description  Assist in selecting dates for less clicking!
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/labor_tracking/labor_summary*
 // @match        https://aftlite-na.amazon.com/labor_tracking/view_daily_detail*
 // @match        https://aftlite-na.amazon.com/labor_tracking/uph_drilldown*
+// @match        https://aftlite-portal.amazon.com/labor_tracking/view_daily_detail*
 // @downloadURL  https://github.com/JGray0705/UserScripts/raw/master/DateInputHelper.user.js
 // @grant        none
 // ==/UserScript==
@@ -57,12 +58,34 @@
         endDate.setHours(23);
         setDate(startDate, endDate);
     }
+    buttons.appendChild(document.createElement("br"));
+    createButton("Sunday").onclick = function() { getDay(0); }
+    createButton("Monday").onclick = function() { getDay(1); }
+    createButton("Tuesday").onclick = function() { getDay(2); }
+    createButton("Wednesday").onclick = function() { getDay(3); }
+    createButton("Thursday").onclick = function() { getDay(4); }
+    createButton("Friday").onclick = function() { getDay(5); }
+    createButton("Saturday").onclick = function() { getDay(6); }
 
     function createButton(name) {
         var button = document.createElement('button');
         button.innerHTML = name;
         buttons.appendChild(button);
         return button;
+    }
+
+    function getDay(day) {
+        let d = new Date();
+        let today = d.getDay();
+        let timeToRemove = (today - day) % 6;
+        if(day > today) {
+            timeToRemove += 7;
+        }
+        d = new Date(d.getTime() - (3600000 * 24 * timeToRemove));
+        let endDate = new Date(d.getTime());
+        endDate.setHours(23);
+        d.setHours(0);
+        setDate(d, endDate);
     }
 
     function setDate(start, end) {
