@@ -14,10 +14,13 @@
     let green = document.createElement("p");
     let blue = document.createElement("p");
     let red = document.createElement("p");
+    let targetInput = document.createElement("select");
+    let time = document.createElement("p");
 
     green.innerHTML = "A green progress bar indicates batching is on time.";
     blue.innerHTML = "A blue progress bar indicates batching is ahead.";
     red.innerHTML = "A red progress bar indicates batching is behind.";
+    time.innerHTML = "Targe completion time: " + new Date().getHours() + ":";
 
     green.style.color = "green";
     blue.style.color = "#5d9def";
@@ -29,6 +32,31 @@
 
     let goal = document.createElement("p");
     red.after(goal);
+
+    goal.after(time);
+    time.appendChild(targetInput);
+
+    for(let i = 0; i < 60; i++) {
+        let option = document.createElement("option");
+        option.value = i;
+        option.text = i;
+        targetInput.appendChild(option);
+    }
+
+    targetInput.value = getCookie("completionTime");
+    targetInput.onchange = function() {
+       document.cookie = "completionTime=" + this.value; // set the cookie so user does not need to select this box every time page loads
+    }
+
+    function getCookie(name) {
+      let cookie = {};
+      document.cookie.split(';').forEach(function(el) { // separate the cookies
+          let [k,v] = el.split('='); // split by name, value
+          cookie[k.trim()] = v;
+      });
+      return cookie[name];
+    }
+
     setInterval(function() {
         let progress = document.getElementsByTagName("b")[1].innerHTML.split("(")[1].split(")")[0].split("%")[0];
         progress = Number(progress);
@@ -45,7 +73,7 @@
             let min = t.getMinutes() - 4; // since batching starts ~ 4 minutes after the hour,
             min = min < 0 ? 0 : min * 100; // min is a decimal but progress is a whole number (x% vs. .x)
 
-            let timePercent = min / 29; // this will target completion at 33 minutes after the hour (29 + the 4 subtracted earlier)
+            let timePercent = min / targetInput.value;
             goal.innerHTML = "Target: " + (timePercent > 100 ? 100 : Math.round(timePercent)) + "%";
             if(timePercent > progress) {
                 // we are behind. set to red
