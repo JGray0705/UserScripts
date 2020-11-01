@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SauronProgress
 // @namespace    https://github.com/JGray0705/UserScripts
-// @version      1.1
+// @version      2.0
 // @description  Change progress bar color based on if you are on time, behind, or too far ahead
 // @author       grajef@
 // @match        http://sauron-na.aka.amazon.com/*
@@ -70,8 +70,7 @@
         }
         else {
             let t = new Date();
-            let min = t.getMinutes() - 4; // since batching starts ~ 4 minutes after the hour,
-            min = min < 0 ? 0 : min * 100; // min is a decimal but progress is a whole number (x% vs. .x)
+            let min = t.getMinutes() * 100;
 
             let timePercent = min / targetInput.value;
             goal.innerHTML = "Target: " + (timePercent > 100 ? 100 : Math.round(timePercent)) + "%";
