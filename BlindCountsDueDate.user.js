@@ -10,7 +10,10 @@
 // ==/UserScript==
 
 (function() {
-    let table = document.querySelectorAll("table")[1];
+    var table = 0;
+    if(window.location.href.match("aftlite-na")) {
+        table = document.querySelectorAll("table")[1];
+    } else table = document.querySelectorAll("table")[0];
     let head = document.createElement("th");
     head.innerHTML = "Due By";
     table.children[0].children[0].appendChild(head);
@@ -49,7 +52,13 @@
             req.onload = function() {
                 let total = 0;
                 let complete = 0;
-                let bins = this.responseXML.getElementsByClassName("reportLayout")[0].children[1]; // tbody of the table
+                var bins = 0;
+                if(window.location.href.match("aftlite-na")) {
+                    bins = this.responseXML.getElementsByClassName("reportLayout")[0].children[1]; // tbody of the table
+                } else {
+                    bins = this.responseXML.querySelector("table");
+                    total = -1;
+                }
                 for(let bin of bins.rows) {
                     total++;
                     if(!bin.cells[2].innerHTML.includes("Incomplete")) {
