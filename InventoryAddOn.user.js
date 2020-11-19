@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Inventory Add-on
 // @namespace    https://github.com/jgray0705/userscripts
-// @version      1.0
+// @version      2.0
 // @description  Add inventory search form to the inventory results page
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/inventory/view_inventory_for_asin*
@@ -36,8 +36,9 @@
             x.style.padding = '1px';
         }); // make all of the buttons match
         if(window.location.href.match("view_inventory_for_asin_display")) { // asin page for AFTLite-Portal
-            var portalAsinHeader = document.getElementsByTagName("h3")[0].innerHTML.split(" ");
+            var portalAsinHeader = document.getElementsByTagName("h3")[0];
             addImage(portalAsinHeader);
+
         }
     }
     else {
@@ -53,16 +54,23 @@
         tables[1].appendChild(row2);
         tables[1].appendChild(row3);
         if(window.location.href.match("view_inventory_for_asin")) { // add image to asin page for AFTLite-na
-            var asinHeader = document.getElementsByTagName("h2")[0].innerHTML.split(" ");
+            var asinHeader = document.getElementsByTagName("h2")[0];
             addImage(asinHeader);
         }
     }
 })();
 
 function addImage(title) {
-    var asin = title[title.length - 1];
-    var img = document.createElement("img");
+    let t = title.innerHTML.split(" ");
+    let asin = t[t.length - 1];
+    let img = document.createElement("img");
     img.src = "https://m.media-amazon.com/images/P/" + asin + ".jpg";
     img.width = 250
+    let barcode = document.createElement("img");
+    barcode.src = "https://aftlite-na.amazon.com/barby_generator/view_barcode?code=" + asin;
+    barcode.width = 120;
+    barcode.height = 80;
     document.body.appendChild(img);
+    title.after(barcode);
+    barcode.after(document.createElement("br"));
 }
