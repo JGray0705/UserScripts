@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BlindCountsDueDate
 // @namespace    https://github.com/jgray0705/UserScripts
-// @version      1.0
+// @version      2.0
 // @description  Show the date/time that blind counts are due
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/bcc/assign*
@@ -23,27 +23,64 @@
 
     let today = new Date();
     for(let row of table.rows) {
+        // check the time for due date
         try{
             // Second_AdHoc_2020-11-16_04-33-21
             let title = row.cells[0].innerHTML.split(">")[1].split("<")[0];
-            // AdHoc_2020-11-16_04-33-21
             title = title.replace("Second_", "").replace("Third_", "");
-            // AdHoc 2020-11-16 04-33-21
-            let date = title.split("_");
-            // 04 33 21
-            let d2 = date[2].split("-");
-            // 2020-11-16T04:33:21.000Z
-            let d = new Date(date[1] + "T" + d2.join(":") + ".000Z"); // create date as UTC and it will convert to local time
-            d = new Date(d.getTime() + 60 * 60 * 24 * 1000);
-            d.setHours(23);
-            d.setMinutes(59);
-            d.setSeconds(59);
-            let data = document.createElement("td");
-            data.innerHTML = d.toLocaleString();
-            row.appendChild(data);
-            if(today.getDay() == d.getDay() && today.getMonth() == d.getMonth() && today.getYear() == d.getYear()) {
-                // count is due today
-                data.style.backgroundColor = "yellow";
+            if(title.includes("AdHoc")) {
+                // AdHoc_2020-11-16_04-33-21
+                title = title.replace("Second_", "").replace("Third_", "");
+                // AdHoc 2020-11-16 04-33-21
+                let date = title.split("_");
+                // 04 33 21
+                let d2 = date[2].split("-");
+                // 2020-11-16T04:33:21.000Z
+                let d = new Date(date[1] + "T" + d2.join(":") + ".000Z"); // create date as UTC and it will convert to local time
+                d = new Date(d.getTime() + 60 * 60 * 24 * 1000);
+                d.setHours(23);
+                d.setMinutes(59);
+                d.setSeconds(59);
+                let data = document.createElement("td");
+                data.innerHTML = d.toLocaleString();
+                row.appendChild(data);
+                if(today.getDay() == d.getDay() && today.getMonth() == d.getMonth() && today.getYear() == d.getYear()) {
+                    // count is due today
+                    data.style.backgroundColor = "yellow";
+                }
+            }
+            else if(title.includes("IRDR")) {
+                // IRDR_12012020_UAZ1_5
+                let date = title.split("_")[1];
+                // due date == date from name + 7 days
+                let d = new Date(date.substring(0, 2) + "/" + date.substring(2, 4) + "/" + date.substring(5));
+                d.setDate(d.getDate() + 7);
+                d.setHours(23);
+                d.setMinutes(59);
+                d.setSeconds(59);
+                let data = document.createElement("td");
+                data.innerHTML = d.toLocaleString();
+                row.appendChild(data);
+                if(today.getDay() == d.getDay() && today.getMonth() == d.getMonth() && today.getYear() == d.getYear()) {
+                    // count is due today
+                    data.style.backgroundColor = "yellow";
+                }
+            }
+            else if(title.includes("LUA") || title.includes("ROV") || title.includes("DOC") || title.includes("HEC")) {
+                let date = title.split("_");
+                date = date[date.length - 1].split("-");
+                let d = new Date(date[0] + "/" + date[1] + "/" + date[2]);
+                d.setDate(d.getDate() + 1);
+                d.setHours(23);
+                d.setMinutes(59);
+                d.setSeconds(59);
+                let data = document.createElement("td");
+                data.innerHTML = d.toLocaleString();
+                row.appendChild(data);
+                if(today.getDay() == d.getDay() && today.getMonth() == d.getMonth() && today.getYear() == d.getYear()) {
+                    // count is due today
+                    data.style.backgroundColor = "yellow";
+                }
             }
             let listLink = row.children[0].getElementsByTagName("a")[0].href.replace("https://aftlite-na.amazon.com", "");
             let req = new XMLHttpRequest();
@@ -58,6 +95,7 @@
                 } else {
                     bins = this.responseXML.querySelector("table");
                     total = -1;
+                    complete = -1;
                 }
                 for(let bin of bins.rows) {
                     total++;
@@ -67,9 +105,35 @@
                 }
                 let d = document.createElement("td");
                 d.innerHTML = complete + "/" + total;
+                if(total > 1000) d.style.backgroundColor = "red";
                 row.appendChild(d);
             }
             req.send();
-        } catch {} // don't really need anything here. This will fail if the list name is in a different format. Pick skip counts always have the same format
+        } catch(error) {
+            console.log(error);
+        }
+        // Check status of users assigned to count
+        let assignedUsers = row.cells[2].querySelectorAll("a");
+        for(let user of assignedUsers) {
+            let login = user.innerHTML.split(" ")[1].replace(")", "");
+            // get last action
+            let request = new XMLHttpRequest();
+            request.open("GET", "/labor_tracking/lookup_history?user_name=" + login);
+            request.responseType = "document";
+            request.onload = function() {
+                let lastAction = "";
+                if(window.location.href.match("aftlite-portal")) {
+                    let table = request.responseXML.getElementsByTagName("tbody")[1];
+                    lastAction = table.rows[1].cells[1].innerHTML.trim();
+                } else {
+                    let table = request.responseXML.getElementsByClassName("reportLayout")[0];
+                    lastAction = table.rows[1].cells[1].innerHTML.trim();
+                }
+                if(lastAction == "EOS") {
+                    row.cells[2].innerHTML = row.cells[2].innerHTML.replace(login, '<span style="background-color:red;">' + login + "(" + lastAction + ")</span>");
+                } else row.cells[2].innerHTML = row.cells[2].innerHTML.replace(login, login + "(" + lastAction + ")");
+            }
+            request.send();
+        }
     }
 })();
