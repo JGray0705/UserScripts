@@ -10,10 +10,7 @@
 // ==/UserScript==
 
 (function() {
-    var table = 0;
-    if(window.location.href.match("aftlite-na")) {
-        table = document.querySelectorAll("table")[1];
-    } else table = document.querySelectorAll("table")[0];
+    let table = window.location.href.match("aftlite-na") ? document.querySelectorAll("table")[1] : document.querySelectorAll("table")[0];
     let head = document.createElement("th");
     head.innerHTML = "Due By";
     table.children[0].children[0].appendChild(head);
@@ -115,23 +112,24 @@
         // Check status of users assigned to count
         let assignedUsers = row.cells[2].querySelectorAll("a");
         for(let user of assignedUsers) {
-            let login = user.innerHTML.split(" ")[1].replace(")", "");
+            let login = window.location.href.match("aftlite-portal") ? user.innerHTML.split(" ")[2].replace(")", "") : user.innerHTML.split(" ")[1].replace(")", "");
             // get last action
             let request = new XMLHttpRequest();
             request.open("GET", "/labor_tracking/lookup_history?user_name=" + login);
             request.responseType = "document";
-            request.onload = function() {
+            request.onloadend = function() {
                 let lastAction = "";
                 if(window.location.href.match("aftlite-portal")) {
-                    let table = request.responseXML.getElementsByTagName("tbody")[1];
-                    lastAction = table.rows[1].cells[1].innerHTML.trim();
+                    let table = request.responseXML.getElementsByTagName("table")[1];
+                    lastAction = table.rows[1].cells[1].lastChild.textContent.trim();
                 } else {
                     let table = request.responseXML.getElementsByClassName("reportLayout")[0];
                     lastAction = table.rows[1].cells[1].innerHTML.trim();
                 }
+                let cell = row.cells[2];
                 if(lastAction == "EOS") {
-                    row.cells[2].innerHTML = row.cells[2].innerHTML.replace(login, '<span style="background-color:red;">' + login + "(" + lastAction + ")</span>");
-                } else row.cells[2].innerHTML = row.cells[2].innerHTML.replace(login, login + "(" + lastAction + ")");
+                    cell.innerHTML = cell.innerHTML.replace(login, `<span style="background-color:red;">${login}(${lastAction})</span>`);
+                } else cell.innerHTML = cell.innerHTML.replace(login, `${login}(${lastAction})`);
             }
             request.send();
         }
