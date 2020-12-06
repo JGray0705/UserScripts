@@ -41,9 +41,16 @@
                 let data = document.createElement("td");
                 data.innerHTML = d.toLocaleString();
                 row.appendChild(data);
-                if(today.getDay() == d.getDay() && today.getMonth() == d.getMonth() && today.getYear() == d.getYear()) {
+                today.setHours(23);
+                today.setMinutes(59);
+                today.setSeconds(59);
+                if(today.getDate() == d.getDate()) {
                     // count is due today
                     data.style.backgroundColor = "yellow";
+                }
+                else if(today.getDate() > d.getDate()) {
+                    // count is late
+                    data.style.backgroundColor = "red";
                 }
             }
             else if(title.includes("IRDR")) {
@@ -58,9 +65,16 @@
                 let data = document.createElement("td");
                 data.innerHTML = d.toLocaleString();
                 row.appendChild(data);
-                if(today.getDay() == d.getDay() && today.getMonth() == d.getMonth() && today.getYear() == d.getYear()) {
+                today.setHours(23);
+                today.setMinutes(59);
+                today.setSeconds(59);
+                if(today.getDate() == d.getDate()) {
                     // count is due today
                     data.style.backgroundColor = "yellow";
+                }
+                else if(today.getDate() > d.getDate()) {
+                    // count is late
+                    data.style.backgroundColor = "red";
                 }
             }
             else if(title.includes("LUA") || title.includes("ROV") || title.includes("DOC") || title.includes("HEC")) {
@@ -74,9 +88,16 @@
                 let data = document.createElement("td");
                 data.innerHTML = d.toLocaleString();
                 row.appendChild(data);
-                if(today.getDay() == d.getDay() && today.getMonth() == d.getMonth() && today.getYear() == d.getYear()) {
+                today.setHours(23);
+                today.setMinutes(59);
+                today.setSeconds(59);
+                if(today.getDate() == d.getDate()) {
                     // count is due today
                     data.style.backgroundColor = "yellow";
+                }
+                else if(today.getDate() > d.getDate()) {
+                    // count is late
+                    data.style.backgroundColor = "red";
                 }
             }
             let listLink = row.children[0].getElementsByTagName("a")[0].href.replace("https://aftlite-na.amazon.com", "");
@@ -132,6 +153,57 @@
                 } else cell.innerHTML = cell.innerHTML.replace(login, `${login}(${lastAction})`);
             }
             request.send();
+        }
+    }
+    // sort the table
+    // a.	Any IRDR Counts
+    // b.	Oldest 2nd and 3rd AdHocs
+    // c.	Oldest 2nd and 3rd strategics
+    // d.	Newest 1st AdHocs
+    // e.	Newest 1st Strategic
+    var rows, i, x, y, shouldSwitch;
+    var switching = true;
+    while (switching) {
+        switching = false;
+        rows = table.rows;
+        /* Loop through all table rows (except the
+    first, which contains table headers): */
+        for (i = 1; i < (rows.length - 1); i++) {
+            shouldSwitch = false;
+            x = rows[i];
+            y = rows[i + 1];
+            if(x.cells[3].textContent > y.cells[3].textContent){
+                shouldSwitch = true;
+                break;
+            }
+            if(x.cells[3].textContent == y.cells[3].textContent){
+                if(x.cells[0].textContent.includes("IRDR") && y.cells[0].textContent.includes("IRDR")) {
+                    if(x.cells[0].textContent.includes("Second") && y.cells[0].textContent.includes("Third")) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if(x.cells[0].textContent.includes("AdHoc") && y.cells[0].textContent.includes("AdHoc")) {
+                    if(x.cells[0].textContent.includes("Second") && y.cells[0].textContent.includes("Third")) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                    if((!x.cells[0].textContent.includes("Second") && !x.cells[0].textContent.includes("Third")) && y.cells[0].textContent.includes("Second")) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if(!x.cells[0].textContent.includes("IRDR") && y.cells[0].textContent.includes("IRDR")) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+        }
+        if (shouldSwitch) {
+            /* If a switch has been marked, make the switch
+      and mark that a switch has been done: */
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
         }
     }
 })();
