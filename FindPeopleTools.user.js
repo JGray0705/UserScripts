@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         FindPeopleTools
 // @namespace    https://github.com/jgray0705/userscripts
-// @version      1.1
+// @version      2.0
 // @description  Add auto refresh and highlight idle logins
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/labor_tracking/find_people*
 // @match        https://aftlite-portal.amazon.com/labor_tracking/find_people*
-// @downloadURL  https://github.com/JGray0705/UserScripts/raw/master/DateInputHelper.user.js
+// @downloadURL  https://github.com/JGray0705/UserScripts/raw/master/FindPeopleTools.user.js
 // @grant        none
 // ==/UserScript==
 
@@ -14,12 +14,16 @@
     if(window.location.href.match("aftlite-na")) {
         let table = document.getElementById("recent_event_table");
         searchTable(table);
+
+        // auto refresh
         let cb = getCheckbox();
         let label = document.createElement("label");
-        label.innerHTML = "Auto Refresh";
+        label.innerHTML = "Auto Refresh (30 seconds)";
         let p = document.getElementsByTagName("table")[0];
         p.after(cb);
         p.after(label);
+
+        // indirect action form
         var form = getIndirectForm();
         label.before(form);
         label.before(document.createElement("br"));
@@ -37,6 +41,7 @@
         let main = document.getElementById("main-content");
         main.before(check);
         check.after(cbLabel);
+        //main.before(getIndirectForm());
     }
 })();
 
@@ -49,15 +54,48 @@ function getCheckbox() {
 }
 
 function searchTable(t) {
+    let map = new Map();
     for(let row of t.rows) {
-        let cell = row.cells[7].innerHTML;
+        if(row.rowIndex < 3) continue; // first 2 rows of the table are not important
+        let cell = row.cells[7].innerHTML.trim();
+        if(map.has(cell)) {
+            map.set(cell, map.get(cell) + 1);
+        } else {
+            map.set(cell, 1);
+        }
         let time = Number(row.cells[5].innerHTML.split("mins")[0]);
-        if(time >= 10 || (time >= 15 && cell.includes("BRK"))) {
-            if(cell.includes("IDLE") || cell.includes("TIMEOFFTASK") || (time >= 15 && cell.includes("BRK")) || !cell.includes("indirect")) {
+        if(cell.includes("TIMEOFFTASK") || cell.includes("IDLE")) {
+            row.cells[5].style.background = "red";
+        }
+        else if(time >= 20 && cell.includes("BRK")) {
+            row.cells[5].style.background = "red";
+        }
+        else if(time >= 10) {
+            if(!cell.includes("indirect")) {
                 row.cells[5].style.background = "red";
             }
         }
     }
+    let head = document.createElement("tr");
+    let table = document.createElement("table");
+    let entries = new Map([...map.entries()].sort((a,b) => b[1] - a[1]));
+    for(let m of entries) {
+        if(m[0].includes("EOS/indirect")) continue;
+        console.log(m);
+        let tr = document.createElement("tr");
+        let action = document.createElement("td");
+        let count = document.createElement("td");
+        action.innerHTML = m[0];
+        count.innerHTML = m[1];
+        action.style.width = "225px";
+        count.style.width = "50px";
+        tr.appendChild(action);
+        tr.appendChild(count);
+        table.appendChild(tr);
+    }
+    table.classList.add("reportLayout");
+    table.style.width = "275px";
+    t.before(table);
 }
 function autoReload(checkbox) {
     setInterval(function() {
@@ -106,16 +144,17 @@ function getIndirectForm() {
         data.append("utf8", "x2713");
 
         let request = new XMLHttpRequest();
-        request.open('POST', '/indirect_action/signin_indirect_action');
+        let action = window.location.href.match("aftlite-na") ? '/indirect_action/signin_indirect_action' : '/indirect_action/validate_name_and_code';
+        request.open('POST', action);
         request.responseType = "document";
         request.onload = function() {
             let f = document.getElementById("Flash");
             if(f !== null) { f.innerHTML = this.responseXML.getElementById("Flash").innerHTML; }
             else { table.before(this.responseXML.getElementById("Flash")); }
-            loginInput.value = "";
-            codeInput.value = "";
         }
         request.send(data);
+        loginInput.value = "";
+        codeInput.value = "";
     }
     // add event to submit form when enter key is pressed
     codeInput.addEventListener("keydown", function(e) {
@@ -124,4 +163,22 @@ function getIndirectForm() {
         }
     });
     return table;
+}
+
+function submitIndirectForm(login, code, indirectForm) {
+    let data = new FormData();
+    data.append("name", login);
+    data.append("code", code);
+    data.append("utf8", "x2713");
+
+    let request = new XMLHttpRequest();
+    let action = window.location.href.match("aftlite-na") ? '/indirect_action/signin_indirect_action' : '/indirect_action/validate_name_and_code';
+    request.open('POST', action);
+    request.responseType = "document";
+    request.onload = function() {
+        let f = document.getElementById("Flash");
+        if(f !== null) { f.innerHTML = this.responseXML.getElementById("Flash").innerHTML; }
+        else { indirectForm.before(this.responseXML.getElementById("Flash")); }
+    }
+    request.send(data);
 }
