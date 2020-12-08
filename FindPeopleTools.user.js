@@ -55,13 +55,17 @@ function getCheckbox() {
 
 function searchTable(t) {
     let map = new Map();
+    let total = 0;
     for(let row of t.rows) {
         if(row.rowIndex < 3) continue; // first 2 rows of the table are not important
         let cell = row.cells[7].innerHTML.trim();
-        if(map.has(cell)) {
-            map.set(cell, map.get(cell) + 1);
-        } else {
-            map.set(cell, 1);
+        if(!cell.includes("EOS/indirect")) {
+            if(map.has(cell)) {
+                map.set(cell, map.get(cell) + 1);
+            } else {
+                map.set(cell, 1);
+            }
+            total++;
         }
         let time = Number(row.cells[5].innerHTML.split("mins")[0]);
         if(cell.includes("TIMEOFFTASK") || cell.includes("IDLE")) {
@@ -81,7 +85,6 @@ function searchTable(t) {
     let entries = new Map([...map.entries()].sort((a,b) => b[1] - a[1]));
     for(let m of entries) {
         if(m[0].includes("EOS/indirect")) continue;
-        console.log(m);
         let tr = document.createElement("tr");
         let action = document.createElement("td");
         let count = document.createElement("td");
@@ -93,6 +96,14 @@ function searchTable(t) {
         tr.appendChild(count);
         table.appendChild(tr);
     }
+    let tr = document.createElement("tr");
+    let action = document.createElement("td");
+    let count = document.createElement("td");
+    tr.appendChild(action);
+    tr.appendChild(count);
+    table.appendChild(tr);
+    action.innerHTML = "Total";
+    count.innerHTML = total;
     table.classList.add("reportLayout");
     table.style.width = "275px";
     t.before(table);
