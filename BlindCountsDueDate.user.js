@@ -25,7 +25,7 @@
             // Second_AdHoc_2020-11-16_04-33-21
             let title = row.cells[0].innerHTML.split(">")[1].split("<")[0];
             title = title.replace("Second_", "").replace("Third_", "");
-            if(title.includes("AdHoc")) {
+            if(title.includes("AdHoc") && !title.includes("ROV")) {
                 // AdHoc_2020-11-16_04-33-21
                 title = title.replace("Second_", "").replace("Third_", "");
                 // AdHoc 2020-11-16 04-33-21
@@ -172,11 +172,11 @@
             shouldSwitch = false;
             x = rows[i];
             y = rows[i + 1];
-            if(x.cells[3].textContent > y.cells[3].textContent){
+            if(new Date(x.cells[3].textContent) > new Date(y.cells[3].textContent)){
                 shouldSwitch = true;
                 break;
             }
-            if(x.cells[3].textContent == y.cells[3].textContent){
+            if(new Date(x.cells[3].textContent) == new Date(y.cells[3].textContent)){
                 if(x.cells[0].textContent.includes("IRDR") && y.cells[0].textContent.includes("IRDR")) {
                     if(x.cells[0].textContent.includes("Second") && y.cells[0].textContent.includes("Third")) {
                         shouldSwitch = true;
@@ -184,11 +184,15 @@
                     }
                 }
                 if(x.cells[0].textContent.includes("AdHoc") && y.cells[0].textContent.includes("AdHoc")) {
-                    if(x.cells[0].textContent.includes("Second") && y.cells[0].textContent.includes("Third")) {
+                    if(!x.cells[0].textContent.includes("Third") && y.cells[0].textContent.includes("Third")) {
                         shouldSwitch = true;
                         break;
                     }
                     if((!x.cells[0].textContent.includes("Second") && !x.cells[0].textContent.includes("Third")) && y.cells[0].textContent.includes("Second")) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                    if((!x.cells[0].textContent.includes("Second") && !x.cells[0].textContent.includes("Third")) && y.cells[0].textContent.includes("Third")) {
                         shouldSwitch = true;
                         break;
                     }
