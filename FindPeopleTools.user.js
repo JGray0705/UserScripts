@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         FindPeopleTools
 // @namespace    https://github.com/jgray0705/userscripts
-// @version      2.0
+// @version      3.0
 // @description  Add auto refresh and highlight idle logins
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/labor_tracking/find_people*
@@ -57,7 +57,7 @@ function searchTable(t) {
     let map = new Map();
     let total = 0;
     for(let row of t.rows) {
-        if(row.rowIndex < 3) continue; // first 2 rows of the table are not important
+        if(row.rowIndex < 1) continue; // first 2 rows of the table are not important
         let cell = row.cells[7].innerHTML.trim();
         if(!cell.includes("EOS/indirect")) {
             if(map.has(cell)) {
