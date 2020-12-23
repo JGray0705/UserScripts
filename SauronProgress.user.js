@@ -20,7 +20,7 @@
     green.innerHTML = "A green progress bar indicates batching is on time.";
     blue.innerHTML = "A blue progress bar indicates batching is ahead.";
     red.innerHTML = "A red progress bar indicates batching is behind.";
-    time.innerHTML = "Targe completion time: " + new Date().getHours() + ":";
+    time.innerHTML = "Target completion time: " + new Date().getHours() + ":";
 
     green.style.color = "green";
     blue.style.color = "#5d9def";
