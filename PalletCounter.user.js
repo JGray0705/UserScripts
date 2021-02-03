@@ -5,7 +5,7 @@
 // @description  Add pallet count to receive inventory page
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/receive_inventory/show*
-// @doanloadURL  https://github.com/JGray0705/UserScripts/raw/master/PalletCounter.user.js
+// @downloadURL  https://github.com/JGray0705/UserScripts/raw/master/PalletCounter.user.js
 // @grant        none
 // ==/UserScript==
 
