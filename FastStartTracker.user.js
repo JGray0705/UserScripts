@@ -4,7 +4,7 @@
 // @version      1.0
 // @description  Highlight people in ADMN for more than 5 minutes to help track fast start
 // @author       grajef@
-// @match        https://aftlite-na.amazon.com/labor_tracking/find_people
+// @match        https://aftlite-na.amazon.com/labor_tracking/find_people*
 // @grant        none
 // ==/UserScript==
 
