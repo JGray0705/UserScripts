@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         FreezerTracker
 // @namespace    https://github.com/jgray0705/UserScripts
-// @version      1.0
+// @version      2.0
 // @description  Tracks amount of time spent in frozen last 12 hours
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/labor_tracking/find_people*
@@ -19,7 +19,7 @@
     setTimeout(function() {
         findPeopleTable.children[0].children[1].appendChild(titleCell);
         for(let row of findPeopleTable.rows) {
-            if(row.rowIndex < 1) continue;
+            if(row.rowIndex < 2) continue;
             let td = document.createElement("td");
             row.appendChild(td);
         }
