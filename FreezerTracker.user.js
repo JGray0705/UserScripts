@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         FreezerTracker
 // @namespace    https://github.com/jgray0705/UserScripts
-// @version      2.0
+// @version      3.0
 // @description  Tracks amount of time spent in frozen last 12 hours
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/labor_tracking/find_people*
@@ -50,7 +50,6 @@
                     if(row.rowIndez < 2) continue;
                     let login = row.children[0].textContent;
                     let uph = parseFloat(row.children[5].textContent);
-                    console.log("UPH:" + login + ":" + uph);
                     if(map.has(login)) {
                         map.set(login, map.get(login) + uph);
                     } else {

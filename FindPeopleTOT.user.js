@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         FindPeopleTOT
 // @namespace    https://github.com/jgray0705/UserScripts
-// @version      1.0
+// @version      2.0
 // @description  Tracks amount of Time off task in last 12 hours
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/labor_tracking/find_people*
