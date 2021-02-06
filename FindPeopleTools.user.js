@@ -55,11 +55,25 @@ function getCheckbox() {
 
 function searchTable(t) {
     let map = new Map();
+    let zoneMap = new Map();
     let total = 0;
     for(let row of t.rows) {
-        if(row.rowIndex < 1) continue; // first 2 rows of the table are not important
+        if(row.rowIndex <= 1) continue; // first 2 rows of the table are not important
         let cell = row.cells[7].innerHTML.trim();
         if(!cell.includes("EOS/indirect")) {
+            if(cell.includes("receive") || cell.includes("stow") || cell.includes("pack")) { // find the zone
+                let bin = row.cells[4].innerHTML.trim();
+                let zone = "";
+                if(bin.startsWith("P-1-C")) zone = "Chilled";
+                else if(bin.startsWith("P-1-F")) zone = "Frozen";
+                else zone = "Ambient";
+                let key = cell + "," + zone;
+                if(zoneMap.has(key)) {
+                zoneMap.set(key, zoneMap.get(key) + 1);
+                } else {
+                    zoneMap.set(key, 1);
+                }
+            }
             if(map.has(cell)) {
                 map.set(cell, map.get(cell) + 1);
             } else {
@@ -83,11 +97,14 @@ function searchTable(t) {
     let head = document.createElement("tr");
     let table = document.createElement("table");
     let entries = new Map([...map.entries()].sort((a,b) => b[1] - a[1]));
+    let rowNum = 0;
     for(let m of entries) {
         if(m[0].includes("EOS/indirect")) continue;
         let tr = document.createElement("tr");
         let action = document.createElement("td");
         let count = document.createElement("td");
+        tr.id = m[0];
+        tr.style.background = "#C2DFF0";
         action.innerHTML = m[0];
         count.innerHTML = m[1];
         action.style.width = "225px";
@@ -95,11 +112,13 @@ function searchTable(t) {
         tr.appendChild(action);
         tr.appendChild(count);
         table.appendChild(tr);
+        rowNum++;
     }
     let tr = document.createElement("tr");
     let action = document.createElement("td");
     let count = document.createElement("td");
     tr.appendChild(action);
+    tr.style.background = "#C2DFF0";
     tr.appendChild(count);
     table.appendChild(tr);
     action.innerHTML = "Total";
@@ -107,7 +126,26 @@ function searchTable(t) {
     table.classList.add("reportLayout");
     table.style.width = "275px";
     t.before(table);
+    let zonesSorted = new Map([...zoneMap.entries()].sort((a, b) => String(b[0]).localeCompare(a[0])));
+    for(let m of zonesSorted) {
+        let a = m[0].split(",");
+        let func = a[0];
+        let zone = a[1];
+        let tr = document.getElementById(func);
+        let action = document.createElement("td");
+        let count = document.createElement("td");
+        let row = document.createElement("tr");
+        row.style.background = "#DFFFC2";
+        action.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + a[1];
+        count.innerHTML = m[1];
+        action.style.width = "225px";
+        count.style.width = "50px";
+        row.appendChild(action);
+        row.appendChild(count);
+        tr.after(row);
+    }
 }
+
 function autoReload(checkbox) {
     setInterval(function() {
         if(checkbox.checked) {
