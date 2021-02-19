@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         FindPeopleTOT
 // @namespace    https://github.com/jgray0705/UserScripts
-// @version      2.0
-// @description  Tracks amount of Time off task in last 12 hours
+// @version      3.0
+// @description  Tracks amount of Time off task for the day (00:00 to [current hour]:59)
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/labor_tracking/find_people*
 // @downloadURL  https://github.com/JGray0705/UserScripts/raw/master/FindPeopleTOT.user.js
@@ -20,7 +20,7 @@
         for(let row of findPeopleTable.rows) {
             if(row.rowIndex < 2) continue;
             let td = document.createElement("td");
-            td.id = row.children[2].children[0].textContent + "tot";
+            td.id = "tot" + row.children[2].children[0].textContent;
             row.appendChild(td);
         }
     }, 1000);
@@ -29,7 +29,8 @@
     xhr.open("POST", "/labor_tracking/uph_drilldown");
     let data = new FormData();
     let endDate = new Date();
-    let startDate = new Date(endDate.getTime() - 3600000 * 12); // search last 12 hours
+    let startDate = new Date();
+    startDate.setHours(0);
     data.append("date[start_month]", startDate.getMonth() >= 9 ? startDate.getMonth() + 1 : "0" + (startDate.getMonth() + 1));
     data.append("date[start_day]", startDate.getDate() >= 10 ? startDate.getDate() : "0" + startDate.getDate());
     data.append("date[start_year]", startDate.getFullYear());
@@ -59,7 +60,7 @@
             try{
                 let login = row.cells[2].children[0].innerHTML;
                 let time = map.has(login) ? map.get(login) : 0;
-                let cell = document.getElementById(login + "tot");
+                let cell = document.getElementById("tot" + login);
                 if(time <= 5) cell.style.backgroundColor = "yellow";
                 else cell.style.backgroundColor = "red";
                 if(time == 0) cell.style.backgroundColor = "white";
@@ -68,4 +69,27 @@
         }
     }
     xhr.send(data);
+    titleCell.onclick = function() {
+        let rows, i, x, y, shouldSwitch;
+        let switching = true;
+        while (switching) {
+            switching = false;
+            rows = findPeopleTable.children[1].children;
+            /* Loop through all table rows (except the first, which contains table headers): */
+            for (i = 0; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = Number(rows[i].querySelector('td[id^="tot"]').innerHTML.split(" ")[0]);
+                y = Number(rows[i + 1].querySelector('td[id^="tot"]').innerHTML.split(" ")[0]);
+                if(y > x) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                /* If a switch has been marked, make the switchand mark that a switch has been done: */
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+    }
 })();
