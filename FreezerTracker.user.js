@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         FreezerTracker
 // @namespace    https://github.com/jgray0705/UserScripts
-// @version      3.0
+// @version      4.0
 // @description  Tracks amount of time spent in frozen last 12 hours
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/labor_tracking/find_people*
@@ -21,6 +21,7 @@
         for(let row of findPeopleTable.rows) {
             if(row.rowIndex < 2) continue;
             let td = document.createElement("td");
+            td.id = "freezer" + row.children[2].children[0].textContent;
             row.appendChild(td);
         }
     }, 500);
@@ -60,14 +61,39 @@
             for(let row of findPeopleTable.rows) {
                 if(row.rowIndex < 2) continue;
                 try{
+                    let login = row.cells[2].children[0].innerHTML;
+                    let cell = document.getElementById("freezer" + login);
                     let time = map.has(row.cells[2].children[0].innerHTML) ? map.get(row.cells[2].children[0].innerHTML) : 0;
-                    if(time < 1.5) row.cells[9].style.backgroundColor = "orange";
-                    else if(time < 2) row.cells[9].style.backgroundColor = "yellow";
-                    if(time >= 2) row.cells[9].style.backgroundColor = "white";
-                    row.cells[9].innerHTML = time;
+                    if(time < 1.5) cell.style.backgroundColor = "orange";
+                    else if(time < 2) cell.style.backgroundColor = "yellow";
+                    if(time >= 2) cell.style.backgroundColor = "white";
+                    cell.innerHTML = time;
                 } catch(e) { console.log(e); }
             }
         }
         xhr.send(data);
+    }
+    titleCell.onclick = function() {
+        let rows, i, x, y, shouldSwitch;
+        let switching = true;
+        while (switching) {
+            switching = false;
+            rows = findPeopleTable.children[1].children;
+            /* Loop through all table rows (except the first, which contains table headers): */
+            for (i = 0; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = Number(rows[i].querySelector('td[id^="freezer"]').innerHTML.split(" ")[0]);
+                y = Number(rows[i + 1].querySelector('td[id^="freezer"]').innerHTML.split(" ")[0]);
+                if(y > x) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                /* If a switch has been marked, make the switchand mark that a switch has been done: */
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
     }
 })();
