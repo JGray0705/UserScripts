@@ -96,7 +96,7 @@
                     }
                     i++;
                     if(i == table.rows.length) clearInterval(interval);
-                }, 375);
+                }, 425);
                 //setTimeout(function() {
                 //location = location + "?asin=" + asin;
                 //}, 4000);
