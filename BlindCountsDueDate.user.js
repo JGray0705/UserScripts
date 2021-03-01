@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BlindCountsDueDate
 // @namespace    https://github.com/jgray0705/UserScripts
-// @version      2.0
+// @version      3.0
 // @description  Show the date/time that blind counts are due
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/bcc/assign*
@@ -44,11 +44,11 @@
                 today.setHours(23);
                 today.setMinutes(59);
                 today.setSeconds(59);
-                if(today.getDate() == d.getDate()) {
+                if(today.getDate() == d.getDate() && today.getMonth() == d.getMonth() && today.getFullYear() == d.getFullYear()) {
                     // count is due today
                     data.style.backgroundColor = "yellow";
                 }
-                else if(today.getDate() > d.getDate()) {
+                else if(today.getFullYear() > d.getFullYear() || today.getMonth() > d.getMonth() || (today.getMonth() == d.getMonth() && today.getDate() > d.getDate())) {
                     // count is late
                     data.style.backgroundColor = "red";
                 }
@@ -77,7 +77,7 @@
                     data.style.backgroundColor = "red";
                 }
             }
-            else if(title.includes("LUA") || title.includes("ROV") || title.includes("DOC") || title.includes("HEC")) {
+            else {
                 let date = title.split("_");
                 date = date[date.length - 1].split("-");
                 let d = new Date(date[0] + "/" + date[1] + "/" + date[2]);
@@ -172,6 +172,10 @@
             shouldSwitch = false;
             x = rows[i];
             y = rows[i + 1];
+            if(x.cells[3].textContent == "Invalid Date" && y.cells[3].textContent != "Invalid Date") {
+                shouldSwitch = true;
+                break;
+            }
             if(new Date(x.cells[3].textContent) > new Date(y.cells[3].textContent)){
                 shouldSwitch = true;
                 break;
