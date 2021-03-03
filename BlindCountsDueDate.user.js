@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BlindCountsDueDate
 // @namespace    https://github.com/jgray0705/UserScripts
-// @version      3.0
+// @version      4.0
 // @description  Show the date/time that blind counts are due
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/bcc/assign*
@@ -35,6 +35,33 @@
                 // 2020-11-16T04:33:21.000Z
                 let d = new Date(date[1] + "T" + d2.join(":") + ".000Z"); // create date as UTC and it will convert to local time
                 d = new Date(d.getTime() + 60 * 60 * 24 * 1000);
+                d.setHours(23);
+                d.setMinutes(59);
+                d.setSeconds(59);
+                let data = document.createElement("td");
+                data.innerHTML = d.toLocaleString();
+                row.appendChild(data);
+                today.setHours(23);
+                today.setMinutes(59);
+                today.setSeconds(59);
+                if(today.getDate() == d.getDate() && today.getMonth() == d.getMonth() && today.getFullYear() == d.getFullYear()) {
+                    // count is due today
+                    data.style.backgroundColor = "yellow";
+                }
+                else if(today.getFullYear() > d.getFullYear() || today.getMonth() > d.getMonth() || (today.getMonth() == d.getMonth() && today.getDate() > d.getDate())) {
+                    // count is late
+                    data.style.backgroundColor = "red";
+                }
+            }
+            else if(title.includes("Ad_Hoc")) {
+                // AdHoc_2020-11-16_04-33-21
+                title = title.replace("Second_", "").replace("Third_", "");
+                // AdHoc 2020-11-16 04-33-21
+                let date = title.split("_");
+                // 04 33 21
+                // 2020-11-16T04:33:21.000Z
+                let d = new Date(date[3] + "-" + date[4] + "-" + date[5]); // create date as UTC and it will convert to local time
+                d = new Date(d.getTime() + 60 * 60 * 48 * 1000);
                 d.setHours(23);
                 d.setMinutes(59);
                 d.setSeconds(59);
