@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         FreezerTracker
 // @namespace    https://github.com/jgray0705/UserScripts
-// @version      4.0
+// @version      5.0
 // @description  Tracks amount of time spent in frozen last 12 hours
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/labor_tracking/find_people*
@@ -10,7 +10,7 @@
 // ==/UserScript==
 
 (function() {
-    let functions = ["pack", "receive", "receive2_direct", "receive2", "receive_direct", "removal"];
+    let functions = ["pack", "receive", "receive2_direct", "receive2", "receive_direct", "removal", "bcc"];
     let map = new Map();
     let findPeopleTable = window.location.href.match("aftlite-portal") ? document.getElementsByTagName("table")[0] : document.getElementById("recent_event_table");
     let titleCell = document.createElement("th");
