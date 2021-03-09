@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UPHDrilldownInMinutes
 // @namespace    https://github.com/jgray0705/UserScripts
-// @version      1.0
+// @version      2.0
 // @description  Convert hours to minutes
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/labor_tracking/uph_drilldown*
