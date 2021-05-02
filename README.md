@@ -7,7 +7,7 @@ Script titles can be clicked to get the install URL
 
 # [Blind Counts Tools](https://github.com/JGray0705/UserScripts/raw/master/BlindCountsDueDate.user.js)
 ### Adds a row to show when each count list is due to be compliant. Also shows the last action of the person assigned to the list and highlights them if they are EOS
-![blind counts page](https://imgur.com/mNbhUAG)
+![blind counts page](https://imgur.com/mNbhUAG.png)
 
 # [Copy Labor Summary](https://github.com/JGray0705/UserScripts/raw/master/CopyLaborSummary.user.js)
 
