@@ -5,9 +5,9 @@ Script titles can be clicked to get the install URL
 # [ASM Indirect](https://github.com/JGray0705/UserScripts/raw/master/ASMIndirect.user.js)
 ### Adds buttons to the indirect action page to sign the current user into either ASM or EOS. Lines 13 and 14 can be modified to change the action if you want something else.
 
-# [BaselineSelectAll](https://github.com/JGray0705/UserScripts/raw/master/BaselineSelectAll.user.js)
-
-### Selects all checkboxes on the baseline users page saving many clicks.
+# [Blind Counts Tools](https://github.com/JGray0705/UserScripts/raw/master/BlindCountsDueDate.user.js)
+### Adds a row to show when each count list is due to be compliant. Also shows the last action of the person assigned to the list and highlights them if they are EOS
+![blind counts page](https://imgur.com/mNbhUAG)
 
 # [Copy Labor Summary](https://github.com/JGray0705/UserScripts/raw/master/CopyLaborSummary.user.js)
 
@@ -41,12 +41,3 @@ Script titles can be clicked to get the install URL
 # [Pallet Counter](https://github.com/JGray0705/UserScripts/raw/master/PalletCounter.user.js)
 
 ### Shows the number of pallets in a tranship load.
-
-# [Sauron Progress](https://github.com/JGray0705/UserScripts/raw/master/SauronProgress.user.js)
-
-### Changes the color of the progress bar on sauron depending on if batching is trending on time, behind, or ahead (+5%)
-![sauron dashboard](https://imgur.com/QMGbbvr.png)
-
-# [UPH Drilldown Lower Case Logins](https://github.com/JGray0705/UserScripts/raw/master/UPHDrilldownLowerCaseLogins.user.js)
-
-### For those that use retail assistant to view names, this will allow it to work on the UPH Drilldown page.
