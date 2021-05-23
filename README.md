@@ -2,6 +2,10 @@
 ###### Made by @grajef
 Script titles can be clicked to get the install URL
 
+# [AFTLite Tab Names](https://github.com/JGray0705/UserScripts/raw/master/AFTLiteTabTitles.user.js)
+### Modifies the tab names of AFTLite pages to make them easier to find. (No more clicking through 50 tabs to find the right one)
+![tabs renamed](https://i.imgur.com/eGJnFta.png)
+
 # [ASM Indirect](https://github.com/JGray0705/UserScripts/raw/master/ASMIndirect.user.js)
 ### Adds buttons to the indirect action page to sign the current user into either ASM or EOS. Lines 13 and 14 can be modified to change the action if you want something else.
 
