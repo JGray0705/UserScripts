@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AFTLiteTabTitles
 // @namespace    https://github.com/jgray0705/UserScripts
-// @version      1.0
+// @version      2.0
 // @description  Change tab title to better reflect page
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/*
@@ -9,6 +9,7 @@
 // ==/UserScript==
 
 (function() {
-    let spl = window.location.pathname.split('/');
-    document.title = spl[spl.length - 1];
+    let spl = document.title.split('>');
+    document.title = spl[spl.length - 1].replace('View ', ' ');
+    if(location.href.includes('outbound_dashboard')) document.title = "Outbound Dashboard";
 })();
