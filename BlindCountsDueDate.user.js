@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BlindCountsDueDate
 // @namespace    https://github.com/jgray0705/UserScripts
-// @version      4.0
+// @version      5.0
 // @description  Show the date/time that blind counts are due
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/bcc/assign*
@@ -76,6 +76,30 @@
                     data.style.backgroundColor = "yellow";
                 }
                 else if(today.getFullYear() > d.getFullYear() || today.getMonth() > d.getMonth() || (today.getMonth() == d.getMonth() && today.getDate() > d.getDate())) {
+                    // count is late
+                    data.style.backgroundColor = "red";
+                }
+            }
+            else if(title.includes("BayTest")) {
+                // IRDR_12012020_UAZ1_5
+                let date = title.split("_")[2];
+                // due date == date from name + 2 days
+                let d = new Date(date.substring(0, 2) + "/" + date.substring(2, 4) + "/" + date.substring(5));
+                d.setDate(d.getDate() + 2);
+                d.setHours(23);
+                d.setMinutes(59);
+                d.setSeconds(59);
+                let data = document.createElement("td");
+                data.innerHTML = d.toLocaleString();
+                row.appendChild(data);
+                today.setHours(23);
+                today.setMinutes(59);
+                today.setSeconds(59);
+                if(today.getDate() == d.getDate()) {
+                    // count is due today
+                    data.style.backgroundColor = "yellow";
+                }
+                else if(today.getDate() > d.getDate()) {
                     // count is late
                     data.style.backgroundColor = "red";
                 }
