@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         FindPeopleTools
 // @namespace    https://github.com/jgray0705/userscripts
-// @version      5.0
+// @version      6.0
 // @description  Add auto refresh and highlight idle logins
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/labor_tracking/find_people*
@@ -19,7 +19,7 @@
         // auto refresh
         let cb = getCheckbox();
         let label = document.createElement("label");
-        label.innerHTML = "Auto Refresh (30 seconds)";
+        label.innerHTML = "Auto Refresh (1 Minute)";
         let p = document.getElementsByTagName("table")[0];
         p.after(cb);
         p.after(label);
@@ -153,7 +153,7 @@ function autoReload(checkbox) {
         if(checkbox.checked) {
             location.reload();
         }
-    }, 30000);
+    }, 60000);
 }
 
 function getIndirectForm() {
