@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BlindCountsDueDate
 // @namespace    https://github.com/jgray0705/UserScripts
-// @version      5.0
+// @version      6.0
 // @description  Show the date/time that blind counts are due
 // @author       grajef@
 // @match        https://aftlite-na.amazon.com/bcc/assign*
@@ -109,6 +109,33 @@
                 let date = title.split("_")[1];
                 // due date == date from name + 7 days
                 let d = new Date(date.substring(0, 2) + "/" + date.substring(2, 4) + "/" + date.substring(5));
+                d.setDate(d.getDate() + 7);
+                d.setHours(23);
+                d.setMinutes(59);
+                d.setSeconds(59);
+                let data = document.createElement("td");
+                data.innerHTML = d.toLocaleString();
+                row.appendChild(data);
+                today.setHours(23);
+                today.setMinutes(59);
+                today.setSeconds(59);
+                if(today.getDate() == d.getDate()) {
+                    // count is due today
+                    data.style.backgroundColor = "yellow";
+                }
+                else if(today.getDate() > d.getDate()) {
+                    // count is late
+                    data.style.backgroundColor = "red";
+                }
+            }
+            else if(title.includes("I_RDR")) {
+                // I_RDR_{FC}_MM_DD_YYYY_{n}
+                let date = title.split("_");
+                let l = date.length;
+                let year = date[l - 2];
+                let day = date[l - 3];
+                let month = date[l - 4];
+                let d = new Date(month + "/" + day + "/" + year);
                 d.setDate(d.getDate() + 7);
                 d.setHours(23);
                 d.setMinutes(59);
